@@ -1,43 +1,121 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
+    <!-- ========================================== -->
+    <!-- 1. 網頁基本設定區                          -->
+    <!-- ========================================== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>個人簡歷</title>
-    <!-- 引入 GitHub 風格的 Markdown 樣式 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.2.0/github-markdown.min.css">
-    <!-- 引入 marked.js 負責將 Markdown 解析為 HTML -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
-    <style>
-        body {
-            box-sizing: border-box;
-            min-width: 200px;
-            max-width: 980px;
-            margin: 0 auto;
-            padding: 45px;
-        }
-        @media (max-width: 767px) {
-            body { padding: 15px; }
-        }
-    </style>
-</head>
-<body class="markdown-body">
-    <!-- 畫面容器 -->
-    <div id="content">資料載入中...</div>
 
-    <!-- 邏輯腳本 -->
+    <!-- ========================================== -->
+    <!-- 2. 外部工具與樣式載入區                    -->
+    <!-- ========================================== -->
+    <!-- 引入 Tailwind CSS：負責網頁所有的排版與視覺美化 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- 引入 Tailwind Typography：專門用來把 Markdown 轉出來的文字變好看 (例如字體大小、行距) -->
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    
+    <!-- 引入 Marked.js：負責把你的 resume.md 翻譯成網頁看得懂的 HTML -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
+    
+    <!-- ========================================== -->
+    <!-- 3. 自訂網站主題顏色區                      -->
+    <!-- ========================================== -->
     <script>
-        // 關注點分離：動態抓取同層級的 resume.md，並將其渲染至畫面
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        // 【你可以修改這裡】更改網站的主要顏色，目前設定為深藍色 (科技/專業感)
+                        primary: '#1e3a8a', 
+                        // 【你可以修改這裡】更改網站的次要顏色 (例如按鈕的底色、連結顏色)
+                        secondary: '#3b82f6'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-secondary selection:text-white">
+    
+    <!-- 網頁外層主要框架：設定最大寬度並置中，手機版與電腦版自動切換排版方向 -->
+    <div class="max-w-6xl mx-auto px-4 py-12 md:py-20 flex flex-col md:flex-row gap-10 md:gap-16">
+        
+        <!-- ========================================== -->
+        <!-- 視圖區 (View) - 左側：固定個人資訊 (名片區)-->
+        <!-- ========================================== -->
+        <aside class="md:w-1/3 flex flex-col items-center md:items-start text-center md:text-left shrink-0">
+            
+            <!-- 【修改大頭貼】請將照片命名為 profile.jpg 放進 GitHub 專案中 -->
+            <!-- onerror 是一層保護機制，如果找不到你的照片，會先自動生成一張帶有 Coach 字樣的圖片 -->
+            <img src="./profile.jpg" alt="Profile Photo" onerror="this.src='https://ui-avatars.com/api/?name=Coach&background=1e3a8a&color=fff&size=256'" class="w-48 h-48 md:w-56 md:h-56 rounded-full object-cover shadow-xl border-4 border-white mb-6">
+            
+            <!-- 【修改名字】 -->
+            <h1 class="text-3xl md:text-4xl font-bold text-slate-900 mb-2">你的名字</h1>
+            
+            <!-- 【修改職稱】 -->
+            <h2 class="text-lg text-secondary font-bold mb-4 tracking-wide">國家隊體能教練 / 運動科學博士生</h2>
+            
+            <!-- 【修改個人簡介】簡短的一句話介紹自己 -->
+            <p class="text-slate-600 mb-8 leading-relaxed">
+                致力於透過運動科學、數據分析與系統化訓練，優化國家射擊隊、輕艇隊與划船隊之競技表現。
+            </p>
+            
+            <!-- 聯絡按鈕區塊 -->
+            <div class="flex flex-col gap-3 w-full max-w-xs">
+                <!-- 【修改 Email】將 href="mailto:..." 後面的信箱換成你的 -->
+                <a href="mailto:your.email@example.com" class="px-5 py-3 bg-primary text-white rounded-lg shadow hover:bg-blue-800 transition text-center font-medium">
+                    ✉️ 聯絡信箱
+                </a>
+                
+                <!-- 【修改連結】可以放你的 GitHub (R語言/數據分析專案) 或是任何你想連結的網址 -->
+                <a href="https://github.com/your-profile" target="_blank" class="px-5 py-3 bg-white border border-slate-200 text-slate-700 rounded-lg shadow-sm hover:bg-slate-50 transition text-center font-medium">
+                    📊 數據分析與研究
+                </a>
+            </div>
+        </aside>
+
+        <!-- ========================================== -->
+        <!-- 視圖區 (View) - 右側：動態履歷內容區       -->
+        <!-- ========================================== -->
+        <main class="md:w-2/3 bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-slate-100 min-h-[600px]">
+            
+            <!-- 這裡就是準備用來塞入 Notion (resume.md) 內容的空箱子 -->
+            <!-- prose 開頭的 class 是用來告訴 Tailwind 幫忙美化裡面的 Markdown 元素 -->
+            <div id="content" class="prose prose-slate prose-headings:text-primary prose-a:text-secondary hover:prose-a:text-blue-700 max-w-none">
+                <!-- 載入中過場文字 -->
+                <div class="flex items-center justify-center h-full text-slate-400 animate-pulse">
+                    正在載入簡歷資料...
+                </div>
+            </div>
+        </main>
+
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 邏輯區 (Logic) - 抓取資料並渲染畫面          -->
+    <!-- ========================================== -->
+    <script>
+        // 動作 1：去抓取放在同一個資料夾下的 resume.md 檔案 (你的資料層 Data)
         fetch('./resume.md')
+            // 動作 2：檢查伺服器有沒有正常回傳檔案
             .then(response => {
-                if (!response.ok) throw new Error('伺服器找不到 resume.md');
-                return response.text();
+                if (!response.ok) throw new Error('伺服器找不到 resume.md'); // 如果找不到就報錯
+                return response.text(); // 如果找到了，就把內容轉成純文字
             })
+            // 動作 3：把純文字交給 marked 套件翻譯，然後塞進 id 為 content 的箱子裡顯示出來
             .then(text => {
                 document.getElementById('content').innerHTML = marked.parse(text);
             })
+            // 動作 4：如果中間發生任何錯誤 (例如檔案名稱打錯)，在畫面上顯示紅色的錯誤提示
             .catch(err => {
-                document.getElementById('content').innerHTML = `網頁加載錯誤: ${err.message}`;
+                document.getElementById('content').innerHTML = `
+                    <div class="p-4 bg-red-50 text-red-600 rounded-lg border border-red-100">
+                        <strong>載入失敗：</strong> ${err.message} <br>
+                        請確認 GitHub 專案中是否有 <code>resume.md</code> 這個檔案。
+                    </div>`;
             });
     </script>
 </body>
