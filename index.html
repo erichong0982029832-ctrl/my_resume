@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>個人簡歷</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css/github-markdown.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- 引入 GitHub 風格的 Markdown 樣式 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.2.0/github-markdown.min.css">
+    <!-- 引入 marked.js 負責將 Markdown 解析為 HTML -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
     <style>
         body {
             box-sizing: border-box;
@@ -20,13 +22,15 @@
     </style>
 </head>
 <body class="markdown-body">
-    <div id="content">內容載入中...</div>
+    <!-- 畫面容器 -->
+    <div id="content">資料載入中...</div>
 
+    <!-- 邏輯腳本 -->
     <script>
-        // 核心邏輯：僅負責動態抓取資料並渲染
-        fetch('./README.md')
+        // 關注點分離：動態抓取同層級的 resume.md，並將其渲染至畫面
+        fetch('./resume.md')
             .then(response => {
-                if (!response.ok) throw new Error('找不到數據源 README.md');
+                if (!response.ok) throw new Error('伺服器找不到 resume.md');
                 return response.text();
             })
             .then(text => {
