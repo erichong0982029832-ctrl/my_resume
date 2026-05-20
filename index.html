@@ -1,122 +1,294 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-TW" class="scroll-smooth">
 <head>
-    <!-- ========================================== -->
-    <!-- 1. 網頁基本設定區                          -->
-    <!-- ========================================== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>個人簡歷</title>
-
-    <!-- ========================================== -->
-    <!-- 2. 外部工具與樣式載入區                    -->
-    <!-- ========================================== -->
-    <!-- 引入 Tailwind CSS：負責網頁所有的排版與視覺美化 -->
+    <title>你的名字 | 運動科學與體能訓練專業</title>
+    
+    <!-- 引入 Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- 引入 Tailwind Typography：專門用來把 Markdown 轉出來的文字變好看 (例如字體大小、行距) -->
-    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <!-- 引入 Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     
-    <!-- 引入 Marked.js：負責把你的 resume.md 翻譯成網頁看得懂的 HTML -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
-    
-    <!-- ========================================== -->
-    <!-- 3. 自訂網站主題顏色區                      -->
-    <!-- ========================================== -->
+    <!-- 引入 Font Awesome 網頁圖示 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Tailwind 客製化設定 -->
     <script>
         tailwind.config = {
             theme: {
                 extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans TC"', 'sans-serif'],
+                    },
                     colors: {
-                        // 【你可以修改這裡】更改網站的主要顏色，目前設定為深藍色 (科技/專業感)
-                        primary: '#708090', 
-                        // 【你可以修改這裡】更改網站的次要顏色 (例如按鈕的底色、連結顏色)
-                        secondary: '#f8f8ff'
+                        // 設定主色調為清新、專業的深青色 (Teal/Cyan 系)
+                        primary: '#0e7490', 
+                        primaryHover: '#155e75',
+                        lightBg: '#f8fafc'
                     }
                 }
             }
         }
     </script>
+    <style>
+        /* 確保背景圖片載入前的底色，並設定漸層遮罩 */
+        .hero-bg {
+            /* 建議背景圖：運動訓練場館、數據分析螢幕或你的訓練背影 */
+            background-image: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.7)), url('https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+    </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-secondary selection:text-white">
-    
-    <!-- 網頁外層主要框架：設定最大寬度並置中，手機版與電腦版自動切換排版方向 -->
-    <div class="max-w-6xl mx-auto px-4 py-12 md:py-20 flex flex-col md:flex-row gap-10 md:gap-16">
-        
-        <!-- ========================================== -->
-        <!-- 視圖區 (View) - 左側：固定個人資訊 (名片區)-->
-        <!-- ========================================== -->
-        <aside class="md:w-1/3 flex flex-col items-center md:items-start text-center md:text-left shrink-0">
+<body class="font-sans text-gray-800 antialiased selection:bg-primary selection:text-white">
+
+    <!-- ========================================== -->
+    <!-- 導覽列 (Navbar)                            -->
+    <!-- ========================================== -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 bg-transparent py-4">
+        <div class="max-w-7xl mx-auto px-6 md:px-12 flex justify-between items-center">
+            <a href="#hero" class="text-xl font-bold text-white tracking-wider uppercase">
+                Coach <span class="text-cyan-400">Name</span>
+            </a>
             
-            <!-- 【修改大頭貼】請將照片命名為 profile.jpg 放進 GitHub 專案中 -->
-            <!-- onerror 是一層保護機制，如果找不到你的照片，會先自動生成一張帶有 Coach 字樣的圖片 -->
-            <img src="./profile.jpg" alt="Profile Photo" onerror="this.src='https://ui-avatars.com/api/?name=Coach&background=1e3a8a&color=fff&size=256'" class="w-48 h-48 md:w-56 md:h-56 rounded-full object-cover shadow-xl border-4 border-white mb-6">
-            
-            <!-- 【修改名字】 -->
-            <h1 class="text-3xl md:text-4xl font-bold text-slate-900 mb-2">洪 靖淵</h1>
-            
-            <!-- 【修改職稱】 -->
-            <h2 class="text-lg text-secondary font-bold mb-4 tracking-wide">國家運動訓練中心 體能訓練師</h2>
-            
-            <!-- 【修改個人簡介】簡短的一句話介紹自己 -->
-            <p class="text-slate-600 mb-8 leading-relaxed">
-               讓每一下都有意義。Every Rep Has a Reason
+            <!-- 電腦版選單 -->
+            <div class="hidden md:flex space-x-8">
+                <a href="#about" class="text-white hover:text-cyan-400 font-medium transition">關於我</a>
+                <a href="#portfolio" class="text-white hover:text-cyan-400 font-medium transition">專業領域</a>
+                <a href="#contact" class="text-white hover:text-cyan-400 font-medium transition">聯絡方式</a>
+            </div>
+
+            <!-- 手機版漢堡選單按鈕 -->
+            <button class="md:hidden text-white text-2xl focus:outline-none">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ========================================== -->
+    <!-- 首頁 Hero 區塊                             -->
+    <!-- ========================================== -->
+    <section id="hero" class="hero-bg h-screen min-h-[600px] flex items-center justify-center text-center px-4">
+        <div class="max-w-4xl mx-auto mt-16">
+            <h1 class="text-4xl md:text-6xl font-black text-white mb-6 leading-tight tracking-tight">
+                科學化訓練，<br class="md:hidden">激發極限潛能
+            </h1>
+            <p class="text-lg md:text-2xl text-gray-200 mb-10 font-light tracking-wide">
+                國家隊體能教練 ✕ 運動科學博士生 ✕ 數據分析
             </p>
-            
-            <!-- 聯絡按鈕區塊 -->
-            <div class="flex flex-col gap-3 w-full max-w-xs">
-                <!-- 【修改 Email】將 href="mailto:..." 後面的信箱換成你的 -->
-                <a href="erichong0982029832@gmail.com.com" class="px-5 py-3 bg-primary text-white rounded-lg shadow hover:bg-blue-800 transition text-center font-medium">
-                    ✉️ 聯絡信箱
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#portfolio" class="px-8 py-4 bg-primary text-white rounded-full font-bold shadow-lg hover:bg-primaryHover transition transform hover:-translate-y-1">
+                    查看專業領域
                 </a>
-                
-                <!-- 【修改連結】可以放你的 GitHub (R語言/數據分析專案) 或是任何你想連結的網址 -->
-                <a href="https://www.instagram.com/jing_yuan_hong/" target="_blank" class="px-5 py-3 bg-white border border-slate-200 text-slate-700 rounded-lg shadow-sm hover:bg-slate-50 transition text-center font-medium">
-                    🅾 Instagram
+                <a href="#about" class="px-8 py-4 bg-transparent border-2 border-white text-white rounded-full font-bold hover:bg-white hover:text-gray-900 transition transform hover:-translate-y-1">
+                    認識教練
                 </a>
             </div>
-        </aside>
+        </div>
+    </section>
 
-        <!-- ========================================== -->
-        <!-- 視圖區 (View) - 右側：動態履歷內容區       -->
-        <!-- ========================================== -->
-        <main class="md:w-2/3 bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-slate-100 min-h-[600px]">
+    <!-- ========================================== -->
+    <!-- 關於我 (About)                             -->
+    <!-- ========================================== -->
+    <section id="about" class="py-24 bg-white">
+        <div class="max-w-6xl mx-auto px-6 md:px-12">
             
-            <!-- 這裡就是準備用來塞入 Notion (resume.md) 內容的空箱子 -->
-            <!-- prose 開頭的 class 是用來告訴 Tailwind 幫忙美化裡面的 Markdown 元素 -->
-            <div id="content" class="prose prose-slate prose-headings:text-primary prose-a:text-secondary hover:prose-a:text-blue-700 max-w-none">
-                <!-- 載入中過場文字 -->
-                <div class="flex items-center justify-center h-full text-slate-400 animate-pulse">
-                    正在載入簡歷資料...
+            <!-- 區塊標題 -->
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-black text-gray-900 mb-4 uppercase tracking-wider">About Me</h2>
+                <div class="w-16 h-1 bg-primary mx-auto rounded"></div>
+            </div>
+
+            <div class="flex flex-col md:flex-row items-center gap-12">
+                <!-- 左側照片 -->
+                <div class="w-full md:w-2/5">
+                    <!-- 請將照片命名為 profile.jpg 並放在同資料夾，或貼上網址 -->
+                    <img src="./profile.jpg" onerror="this.src='https://images.unsplash.com/photo-1594381898411-846e7d193883?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'" alt="教練照片" class="rounded-2xl shadow-2xl object-cover w-full h-[400px]">
+                </div>
+                
+                <!-- 右側自介文 -->
+                <div class="w-full md:w-3/5">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">結合學術研究與競技實務的橋樑</h3>
+                    <p class="text-gray-600 mb-6 leading-relaxed text-lg">
+                        我是國家隊體能教練，同時也在攻讀運動科學博士班。目前主要負責訓練的隊伍涵蓋<span class="font-bold text-primary">國家射擊隊（空氣槍與飛靶）、輕艇隊（曲道激流與競速）以及划船隊</span>。
+                    </p>
+                    <p class="text-gray-600 mb-8 leading-relaxed text-lg">
+                        我的專長不僅限於專項體能與能量系統訓練，更致力於利用 **R 語言** 與數據分析工具進行系統性回顧與選手動態評估。除了競技訓練，我也擔任講座講師，推廣大眾運動科學與傷害防護觀念。
+                    </p>
+                    
+                    <!-- 數據視覺化條 (展示能力) -->
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between mb-1 text-sm font-bold text-gray-700">
+                                <span>專項體能訓練 (S&C)</span>
+                                <span>95%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-primary h-2 rounded-full" style="width: 95%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1 text-sm font-bold text-gray-700">
+                                <span>運動數據分析 (R / Google Sheets)</span>
+                                <span>85%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-primary h-2 rounded-full" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1 text-sm font-bold text-gray-700">
+                                <span>學術研究與演講</span>
+                                <span>90%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-primary h-2 rounded-full" style="width: 90%"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </main>
-
-    </div>
+        </div>
+    </section>
 
     <!-- ========================================== -->
-    <!-- 邏輯區 (Logic) - 抓取資料並渲染畫面          -->
+    <!-- 作品展示 / 專業領域 (Portfolio)            -->
+    <!-- ========================================== -->
+    <section id="portfolio" class="py-24 bg-lightBg">
+        <div class="max-w-6xl mx-auto px-6 md:px-12">
+            
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-black text-gray-900 mb-4 uppercase tracking-wider">Portfolio & Expertise</h2>
+                <div class="w-16 h-1 bg-primary mx-auto rounded"></div>
+                <p class="mt-6 text-gray-500 text-lg">競技實務、科學研究與數據分析的三重結合</p>
+            </div>
+
+            <!-- 卡片網格區 (3欄設計) -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <!-- 卡片 1 -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                    <div class="h-48 bg-gray-200 overflow-hidden">
+                        <!-- 可替換為訓練照片 -->
+                        <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="競技訓練" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
+                    </div>
+                    <div class="p-8">
+                        <div class="w-12 h-12 bg-cyan-100 text-primary rounded-lg flex items-center justify-center text-xl mb-4">
+                            <i class="fas fa-dumbbell"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-3">國家隊體能訓練</h3>
+                        <p class="text-gray-600 leading-relaxed">
+                            針對射擊、輕艇、划船等項目，設計專項體能與能量系統訓練。執行 1RM、MAS (最大有氧速度)、MSS (最大衝刺速度) 與 FTP 等科學化檢測並優化表現。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 卡片 2 -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                    <div class="h-48 bg-gray-200 overflow-hidden">
+                        <!-- 可替換為程式碼或圖表照片 -->
+                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="數據分析" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
+                    </div>
+                    <div class="p-8">
+                        <div class="w-12 h-12 bg-cyan-100 text-primary rounded-lg flex items-center justify-center text-xl mb-4">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-3">R 語言與數據分析</h3>
+                        <p class="text-gray-600 leading-relaxed">
+                            運用 R 語言 (Tidyverse, ggplot2) 與 Google Sheets 處理運動數據。進行系統性回顧 (Meta-Analysis)、資料視覺化，建立選手長期監控模型。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 卡片 3 -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                    <div class="h-48 bg-gray-200 overflow-hidden">
+                        <!-- 可替換為講座演講照片 -->
+                        <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="學術演講" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
+                    </div>
+                    <div class="p-8">
+                        <div class="w-12 h-12 bg-cyan-100 text-primary rounded-lg flex items-center justify-center text-xl mb-4">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-3">運動科學講座與防護</h3>
+                        <p class="text-gray-600 leading-relaxed">
+                            擔任運動科學與傷害防護領域講師。將艱澀的博士級學術研究，轉化為一般民眾與基層教練能實際應用的實務操作指南。
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 聯絡方式 (Contact)                         -->
+    <!-- ========================================== -->
+    <section id="contact" class="py-24 bg-white">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            
+            <h2 class="text-3xl md:text-4xl font-black text-gray-900 mb-4 uppercase tracking-wider">Contact Me</h2>
+            <div class="w-16 h-1 bg-primary mx-auto rounded mb-10"></div>
+            
+            <p class="text-xl text-gray-600 mb-12">
+                對體能訓練規劃、運動數據分析合作或演講邀約有興趣嗎？<br>歡迎隨時與我聯繫。
+            </p>
+
+            <div class="flex flex-col sm:flex-row justify-center gap-6 mb-16">
+                <!-- 修改為你的 Email -->
+                <a href="mailto:your.email@example.com" class="flex items-center justify-center gap-3 px-8 py-4 bg-gray-900 text-white rounded-xl hover:bg-primary transition shadow-md font-bold text-lg">
+                    <i class="fas fa-envelope text-xl"></i>
+                    發送 Email
+                </a>
+                <!-- 修改為你的 GitHub 或其他網址 -->
+                <a href="https://github.com/" target="_blank" class="flex items-center justify-center gap-3 px-8 py-4 bg-white border-2 border-gray-200 text-gray-800 rounded-xl hover:border-primary hover:text-primary transition shadow-sm font-bold text-lg">
+                    <i class="fab fa-github text-xl"></i>
+                    GitHub
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- Footer 頁尾                                -->
+    <!-- ========================================== -->
+    <footer class="bg-gray-900 py-8 text-center text-gray-400">
+        <p>&copy; 2024 Coach Name. All rights reserved. | Built with Sports Science & Data</p>
+    </footer>
+
+    <!-- ========================================== -->
+    <!-- JavaScript 交互特效                        -->
     <!-- ========================================== -->
     <script>
-        // 動作 1：去抓取放在同一個資料夾下的 resume.md 檔案 (你的資料層 Data)
-        fetch('./resume.md')
-            // 動作 2：檢查伺服器有沒有正常回傳檔案
-            .then(response => {
-                if (!response.ok) throw new Error('伺服器找不到 resume.md'); // 如果找不到就報錯
-                return response.text(); // 如果找到了，就把內容轉成純文字
-            })
-            // 動作 3：把純文字交給 marked 套件翻譯，然後塞進 id 為 content 的箱子裡顯示出來
-            .then(text => {
-                document.getElementById('content').innerHTML = marked.parse(text);
-            })
-            // 動作 4：如果中間發生任何錯誤 (例如檔案名稱打錯)，在畫面上顯示紅色的錯誤提示
-            .catch(err => {
-                document.getElementById('content').innerHTML = `
-                    <div class="p-4 bg-red-50 text-red-600 rounded-lg border border-red-100">
-                        <strong>載入失敗：</strong> ${err.message} <br>
-                        請確認 GitHub 專案中是否有 <code>resume.md</code> 這個檔案。
-                    </div>`;
-            });
+        // 1. 導覽列滾動特效：當網頁往下滾動時，導覽列加上白色底色與陰影
+        const navbar = document.getElementById('navbar');
+        const navLinks = navbar.querySelectorAll('a');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                // 滾動後：白底、黑字、加陰影
+                navbar.classList.remove('bg-transparent', 'py-4');
+                navbar.classList.add('bg-white', 'shadow-md', 'py-2');
+                navLinks.forEach(link => {
+                    link.classList.remove('text-white');
+                    link.classList.add('text-gray-800');
+                });
+                // 左上角 Logo 顏色調整
+                navLinks[0].classList.remove('text-gray-800');
+                navLinks[0].classList.add('text-gray-900');
+            } else {
+                // 回到頂部：透明底、白字
+                navbar.classList.remove('bg-white', 'shadow-md', 'py-2');
+                navbar.classList.add('bg-transparent', 'py-4');
+                navLinks.forEach(link => {
+                    link.classList.remove('text-gray-800');
+                    link.classList.add('text-white');
+                });
+            }
+        });
     </script>
 </body>
 </html>
