@@ -20,17 +20,20 @@
     </style>
 </head>
 <body class="markdown-body">
-    <div id="content">載入中...</div>
+    <div id="content">內容載入中...</div>
 
     <script>
-        // 自動抓取同資料夾底下的 README.md 並轉成網頁
-        fetch('README.md')
-            .then(response => response.text())
+        // 核心邏輯：僅負責動態抓取資料並渲染
+        fetch('./README.md')
+            .then(response => {
+                if (!response.ok) throw new Error('找不到數據源 README.md');
+                return response.text();
+            })
             .then(text => {
                 document.getElementById('content').innerHTML = marked.parse(text);
             })
             .catch(err => {
-                document.getElementById('content').innerHTML = '內容載入失敗。';
+                document.getElementById('content').innerHTML = `網頁加載錯誤: ${err.message}`;
             });
     </script>
 </body>
